@@ -5,12 +5,7 @@
 </div>
 
 <div class="box">
-  <% for(var i = 0 ; i < newListItems.length ; i++ ){ %>
-  <div class="item">
-    <input type="checkbox" />
-    <p><%=newListItems[i]%></p>
-  </div>
-  <%}%>
+
 
   <form class="item" action="/" method="post">
     <input
@@ -22,6 +17,15 @@
     />
     <button type="submit" name="list" value="<%=itemTitle%>">+</button>
   </form>
+
+
+  <% for(var i = 0 ; i < newListItems.length ; i++ ){ %>
+  <div class="item">
+    <input type="checkbox" />
+    <p><%=newListItems[i]%></p>
+  </div>
+  <%}%>
+
 </div>
 
 <%- include("footer"); -%>

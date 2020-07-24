@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/todolistDB', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/todolistDB', { useNewUrlParser:  true, useUnifiedTopology: true });
+
 
 const app = express();
 
@@ -68,32 +69,33 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-  let item = req.body.newItem;
+  const newItem = req.body.newItem;
 
-  console.log(req.body);
+  var item = new Item({
+    name: newItem
+  });
 
-  if (req.body.list == "Work Day") {
-    workItems.push(item);
-    res.redirect("/work");
-  } else {
-    items.push(item);
-    res.redirect("/");
-  }
+  item.save();
+
+  res.redirect("/");
+
+
+
+
 });
 
-app.get("/work", function (req, res) {
-  res.render("list", { itemTitle: "Work Day", newListItems: workItems });
-});
 
-app.post("/work", function (req, res) {
-  let item = req.body.newItem;
-  workItems.push(item);
-  res.redirect("/work");
-});
 
-app.get("/about", function (req, res) {
-  res.render("about");
-});
+
+
+
+
+
+
+
+
+
+
 
 app.listen(3000, function () {
   console.log("server in up and running on port 3000");
