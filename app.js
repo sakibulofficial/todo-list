@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/todolistDB', { useNewUrlParser:  true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/todolistDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 const app = express();
@@ -16,24 +16,6 @@ const itemSchema = {
 }
 var Item = mongoose.model("item", itemSchema);
 
-var item1 = new Item({
-  name: "code for 1 houre"
-});
-var item2 = new Item({
-  name: "eat breakfast"
-});
-var item3 = new Item({
-  name: "go to sleep"
-});
-
-
-const defaultItems = [item1, item2, item3];
-
-
-
-// item.save();
-
-
 
 
 app.get("/", function (req, res) {
@@ -46,19 +28,17 @@ app.get("/", function (req, res) {
       console.log(err);
     } else {
       for (let i = 0; i < result.length; i++) {
-        itemArray.push(result[i].name);
+        itemArray.push(result[i]);
 
       }
     }
 
     if (result.length === 0) {
-      Item.insertMany(defaultItems, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("added successfully");
-        }
+
+      let deafultitem = new Item({
+        name: "add a todo "
       });
+      deafultitem.save();
       res.redirect("/");
     } else {
       res.render("list", { itemTitle: "Today", newListItems: itemArray });
@@ -79,12 +59,23 @@ app.post("/", function (req, res) {
 
   res.redirect("/");
 
+});
+
+
+
+app.post("/delete", function (req, res) {
+
+  Item.findByIdAndRemove({ _id: req.body.checkbox }, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 
 
 
 });
-
-
 
 
 
